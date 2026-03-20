@@ -1,7 +1,7 @@
-from django.db import models
+git add orders/models,py orders/__init__.py 
 
-class OrderStatus(models.Model):
-    name = models.charField(max_length=50, unique=True)
+git commit -m "feat: add orderStatus model and predefined status constants
 
-    def __str__(self):
-        return self.name
+- Created OrderStatus model with unique name field
+- Added status constants (Pending, Processing, Completed, Cancelled)
+- Prepared structure for order status management"
