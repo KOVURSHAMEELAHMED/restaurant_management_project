@@ -1,26 +1,22 @@
-from django.db import models
+from datetime import datetime
+from django.utils import timezone
+from .models import DailyOperatingHours
 
-class OrderStatus(models.Model):
-    name = models.charField(max_length=50, unique=True)
+def get_today_operating_hours():
+    """
+    Returns the (open_time, close_time) for the current day.
+    Useful for hotel dashboards and guest-facing digital menus.
+    """
 
-    def __str__(self):
-        return self.name
 
+    current_day = timezone.now().strftime('%A')
 
-class Order(models.Model):
+    try:
 
-    table_number = models.IntegerField(null=True, blank=True)
-    customer_name = models.CharField(max_length=100, null=True, blank=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+        hours_record = DailyOperatingHours.objects.get(day=current_day)
 
-    status = models.ForeignKey(
-        orderStatus,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name='orders'
-    )
+        return (hours_record.open_time, hours_record.close_time)
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    except DailyOperatingHours.DoesNotExist:
 
-    def __str__(self):
-        return f"Order #{self.id} - {self.status}"
+        return (None, None)
