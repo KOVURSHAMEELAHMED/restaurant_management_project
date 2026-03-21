@@ -1,6 +1,8 @@
-from django.urls import path
-from .views import *
+from django.db import models
 
-urlpatterns = [
-    path('items/', ItemView.as_view(), name='item-list'),
-]
+class Restaurant(models.Model):
+
+    has_delivery = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
