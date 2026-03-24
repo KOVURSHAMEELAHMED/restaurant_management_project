@@ -1,0 +1,19 @@
+from datetime import datetime, time
+
+def is_restaurant_open():
+    """
+    Checks if the restaurant is currently open.
+    Hours: 9:00 AM to 10:00 PM Daily.
+    """
+    now = datetime.now()
+    current_time = now.time()
+    
+    # Define opening and closing times
+    opening_time = time(9, 0)   # 9:00 AM
+    closing_time = time(22, 0)  # 10:00 PM (22:00)
+
+    # Check if current time is within the range
+    if opening_time <= current_time <= closing_time:
+        return True
+    
+    return False
