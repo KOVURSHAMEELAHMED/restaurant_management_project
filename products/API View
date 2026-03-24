@@ -1,0 +1,19 @@
+class TableDetailView(generics.RetrieveAPIView):
+    """
+    Retrieves a single table instance by its ID (pk).
+    """
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
+
+    from rest_framework import generics
+from .models import Table
+from .serializers import TableSerializer
+
+
+from django.urls import path
+from .views import TableDetailView
+
+urlpatterns = [
+    # ... your other URLs ...
+    path('api/tables/<int:pk>/', TableDetailView.as_view(), name='table-detail'),
+]
