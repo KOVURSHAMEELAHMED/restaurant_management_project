@@ -1,14 +1,21 @@
-from django.db import models
+import re
 
-class DailySpecial(models.Model):
-    # ... (your existing fields like name, price, description) ...
-
-    @staticmethod
-    def get_random_special():
-        """
-        Queries the database for all DailySpecial objects and returns one at random.
-        Returns None if no specials exist.
-        """
-        # .order_by('?') tells the database to return results in a random order.
-        # .first() safely returns the first item or None if the queryset is empty.
-        return DailySpecial.objects.order_by('?').first()
+def validate_phone_number(phone_string):
+    """
+    Validates a phone number string.
+    Matches: +1 123-456-7890, 1234567890, +11234567890, etc.
+    """
+    # Regex breakdown:
+    # ^\+?1?      -> Optional plus and optional country code '1'
+    # \s?         -> Optional space
+    # \d{3}       -> 3 digits (area code)
+    # [\s.-]?     -> Optional separator (space, dot, or hyphen)
+    # \d{3}       -> 3 digits
+    # [\s.-]?     -> Optional separator
+    # \d{4}$      -> 4 digits at the end
+    
+    pattern = r'^\+?1?\s?\d{3}[\s.-]?\d{3}[\s.-]?\d{4}$'
+    
+    if re.match(pattern, phone_string):
+        return True
+    return False
