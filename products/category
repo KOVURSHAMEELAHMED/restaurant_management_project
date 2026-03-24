@@ -1,0 +1,20 @@
+from rest_framework import generics
+from .models import MenuItem
+from .serializers import MenuItemSerializer
+
+class MenuItemListView(generics.ListAPIView):
+    """
+    Returns a list of all menu items, or filters them 
+    by category if a 'category' query parameter is provided.
+    """
+    serializer_class = MenuItemSerializer
+
+    def get_queryset(self):
+        queryset = MenuItem.objects.all()
+        category_name = self.request.query_params.get('category')
+        
+        if category_name:
+            # Filters using the related 'category_name' field in the Category model
+            queryset = queryset.filter(category__category_name__iexact=category_name)
+            
+        return queryset
