@@ -1,10 +1,21 @@
+import datetime
 from django.db import models
 
-# Create your models here.
-class Item(models.Model):
-    item_name = models.CharField(max_length=150)
-    item_price = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
+class DailySpecialManager(models.Manager):
+    def upcoming(self):
+        """
+        Returns specials where the date is today or in the future.
+        """
+        today = datetime.date.today()
+        return self.filter(date__gte=today)
+
+class DailySpecial(models.Model):
+    # ... your existing fields (e.g., name, price, date) ...
+    name = models.CharField(max_length=100)
+    date = models.DateField()
+
+    # Attach the custom manager
+    objects = DailySpecialManager()
 
     def __str__(self):
-        return str(self.item_name)
+        return f"{self.name} - {self.date}"
