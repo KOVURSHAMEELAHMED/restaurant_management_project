@@ -1,21 +1,14 @@
-from decimal import Decimal, ROUND_HALF_UP
+from django.db import models
 
-def calculate_tip_amount(order_total, tip_percentage):
-    """
-    Calculates the tip amount based on the order total and a tip percentage.
+class DailySpecial(models.Model):
+    # ... (your existing fields like name, price, description) ...
 
-    Args:
-        order_total (Decimal/float): The total cost of the order.
-        tip_percentage (int): The percentage to tip (e.g., 15 for 15%).
-
-    Returns:
-        Decimal: The calculated tip amount rounded to two decimal places.
-    """
-    # Convert inputs to Decimal for financial precision
-    total = Decimal(str(order_total))
-    percentage = Decimal(str(tip_percentage))
-    
-    tip_amount = total * (percentage / 100)
-    
-    # Round to 2 decimal places
-    return tip_amount.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP)
+    @staticmethod
+    def get_random_special():
+        """
+        Queries the database for all DailySpecial objects and returns one at random.
+        Returns None if no specials exist.
+        """
+        # .order_by('?') tells the database to return results in a random order.
+        # .first() safely returns the first item or None if the queryset is empty.
+        return DailySpecial.objects.order_by('?').first()
