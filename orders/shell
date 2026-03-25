@@ -1,0 +1,5 @@
+from orders.models import Order
+
+# This will now return only the pending and processing orders
+active_orders = Order.objects.get_active_orders()
+print(active_orders)
