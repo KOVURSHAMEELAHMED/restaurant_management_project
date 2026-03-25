@@ -1,0 +1,11 @@
+from rest_framework import generics, permissions
+from .serializers import UserProfileSerializer
+
+class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        # High Severity fix: Always return the request.user 
+        # This prevents users from updating other users' profiles via ID in the URL.
+        return self.request.user
