@@ -1,27 +1,24 @@
-from rest_framework.test import APITestCase
-from rest_framework import status
-from .models import Restaurant
+from django.db import models
 
-class RestaurantInfoAPITest(APITestCase):
-    
-    def test_get_restaurant_info(self):
-        # 1. Create a sample Restaurant instance in the test database
-        Restaurant.objects.create(
-            name='Test Restaurant', 
-            address='123 Test St',
-            opening_days='Mon,Tue,Wed'
-        )
+class LoyaltyProgram(models.Model):
+    name = models.CharField(
+        max_length=50, 
+        unique=True, 
+        help_text="Name of the loyalty tier (e.g., Silver Member)"
+    )
+    points_required = models.PositiveIntegerField(
+        unique=True, 
+        help_text="Minimum points required to reach this tier"
+    )
+    discount_percentage = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        help_text="Discount percentage (e.g., 5.00 for 5%)"
+    )
+    description = models.TextField(
+        blank=True, 
+        help_text="Brief explanation of the benefits"
+    )
 
-        # 2. Make a GET request to the API endpoint
-        # Ensure '/api/restaurant-info/' matches your actual URL configuration
-        response = self.client.get('/api/restaurant-info/')
-
-        # 3. Assert the status code is 200 (OK)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # 4. Assert the data returned matches the created instance
-        # Assuming the API returns a list of restaurants
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['name'], 'Test Restaurant')
-        self.assertEqual(response.data[0]['address'], '123 Test St')
-        self.assertEqual(response.data[0]['opening_days'], 'Mon,Tue,Wed')
+    def __str__(self):
+        return f"{self.name} ({self.points_required} pts)"
