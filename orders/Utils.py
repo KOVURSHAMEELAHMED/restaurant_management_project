@@ -1,16 +1,17 @@
 import secrets
 import string
-from .models import Coupon
 
-def generate_coupon_code(length=10):
-    """
-    Generate a unique alphanumeric coupon code.
-    """
+def generate_unique_order_id(length=8):
+    """Generates a unique, short alphanumeric ID for an Order."""
+    from .models import Order  # Local import to avoid circular dependency
+    
+    # Character set: Uppercase letters and digits
     characters = string.ascii_uppercase + string.digits
-
+    
     while True:
-        # Use a dot instead of a comma to call the join method
-        code = ''.join(secrets.choice(characters) for _ in range(length))
-
-        if not Coupon.objects.filter(code=code).exists():
-            return code
+        # Generate a random string
+        new_id = ''.join(secrets.choice(characters) for _ in range(length))
+        
+        # Check if this ID already exists in the database
+        if not Order.objects.filter(order_number=new_id).exists():
+            return new_id
