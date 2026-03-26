@@ -1,20 +1,20 @@
 from django.db import models
-from .utils import generate_unique_order_id
 
-class Order(models.Model):
-    # Short, user-friendly ID (e.g., XJ8K2L9P)
-    order_number = models.CharField(
-        max_length=12, 
+class PaymentMethod(models.Model):
+    name = models.CharField(
+        max_length=50, 
         unique=True, 
-        editable=False, 
-        blank=True
+        help_text="Name of the payment method (e.g., Credit Card)"
     )
-    # ... other fields (order_date, etc.) ...
-
-    def save(self, *args, **kwargs):
-        if not self.order_number:
-            self.order_number = generate_unique_order_id()
-        super().save(*args, **kwargs)
+    description = models.TextField(
+        blank=True, 
+        null=True, 
+        help_text="Optional explanation of the payment method"
+    )
+    is_active = models.BooleanField(
+        default=True, 
+        help_text="Whether this payment method is currently available"
+    )
 
     def __str__(self):
-        return f"Order {self.order_number}"
+        return self.name
