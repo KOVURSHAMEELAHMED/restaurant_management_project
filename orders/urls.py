@@ -1,7 +1,10 @@
-from django.urls import path
-from .views import PaymentMethodListView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import OrderViewSet
+
+router = DefaultRouter()
+router.register(r'orders', OrderViewSet)
 
 urlpatterns = [
-    # ... existing urls ...
-    path('api/payment-methods/', PaymentMethodListView.as_view(), name='payment-method-list'),
+    path('', include(router.urls)),
 ]
