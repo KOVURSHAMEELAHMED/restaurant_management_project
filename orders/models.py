@@ -1,20 +1,20 @@
 from django.db import models
 
-class PaymentMethod(models.Model):
-    name = models.CharField(
-        max_length=50, 
-        unique=True, 
-        help_text="Name of the payment method (e.g., Credit Card)"
-    )
-    description = models.TextField(
-        blank=True, 
-        null=True, 
-        help_text="Optional explanation of the payment method"
-    )
-    is_active = models.BooleanField(
-        default=True, 
-        help_text="Whether this payment method is currently available"
-    )
+class OrderManager(models.Manager):
+    def with_status(self, status):
+        """
+        Returns all orders filtered by a specific status.
+        Example: Order.objects.with_status('pending')
+        """
+        return self.filter(status=status)
+
+class Order(models.Model):
+    # Field definitions
+    status = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Assign the custom manager
+    objects = OrderManager()
 
     def __str__(self):
-        return self.name
+        return f"Order {self.id} - {self.status}"
