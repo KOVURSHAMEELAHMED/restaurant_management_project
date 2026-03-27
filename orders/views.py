@@ -1,20 +1,12 @@
+from rest_framework.generics import ListAPIView
+from .models import PaymentMethod
+from .serializers import PaymentMethodSerializer
 
-from rest_framework import viewsets, filters
-from rest_framework.pagination import PageNumberPagination
-from .models import MenuItem
-from .serializers import MenuItemSerializer
-
-class MenuItemPagination(PageNumberPagination):
-    page_size = 10  # Adjust based on your needs
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-
-class MenuItemViewSet(viewsets.ModelViewSet):
-    queryset = MenuItem.objects.all()
-    serializer_class = MenuItemSerializer
-    pagination_class = MenuItemPagination
+class PaymentMethodListView(ListAPIView):
+    """
+    Returns a list of all active payment methods.
+    """
+    serializer_class = PaymentMethodSerializer
     
-    # Configure the SearchFilter
-    filter_backends = [filters.SearchFilter]
-    # This uses __icontains under the hood for case-insensitive partial matches
-    search_fields = ['name']
+    def get_queryset(self):
+        return PaymentMethod.objects.filter(is_active=True)
