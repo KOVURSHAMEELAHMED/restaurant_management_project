@@ -1,12 +1,13 @@
 from rest_framework import serializers
-from .models import MenuItem
+from .models import ContactFormSubmission
 
-class MenuItemSerializer(serializers.ModelSerializer):
+class ContactFormSubmissionSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = MenuItem
-        fields = ['id', 'name', 'description', 'price', 'is_available']
+        model = ContactFormSubmission
+        fields = ['id', 'name', 'email', 'message']
 
-    def validate_price(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Price must be a positive number.")
+    def validate_name(self, value):
+        if len(value) < 2:
+            raise serializers.ValidationError("Name must be at least 2 characters.")
         return value
