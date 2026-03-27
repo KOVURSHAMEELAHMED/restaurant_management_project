@@ -1,10 +1,6 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import MenuItemViewSet
-
-router = DefaultRouter()
-router.register(r'items', MenuItemViewSet)
+from django.urls import path
+from .views import ContactFormSubmissionView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('contact/', ContactFormSubmissionView.as_view(), name='contact-form'),
 ]
