@@ -1,6 +1,10 @@
-from django.urls import path
-from .views import DailySpecialsListView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import MenuCategoryViewSet
+
+router = DefaultRouter()
+router.register(r'categories', MenuCategoryViewSet)
 
 urlpatterns = [
-    path('daily-specials/', DailySpecialsListView.as_view(), name='daily-specials'),
+    path('', include(router.urls)),
 ]
