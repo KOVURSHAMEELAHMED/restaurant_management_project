@@ -1,10 +1,11 @@
-from rest_framework import generics
-from .models import MenuItem
-from .serializers import MenuItemSerializer
+from rest_framework import viewsets
+from .models import MenuCategory
+from .serializers import MenuCategorySerializer
 
-class DailySpecialsListView(generics.ListAPIView):
-    serializer_class = MenuItemSerializer
-
-    def get_queryset(self):
-        # Filtering ORM for only specials
-        return MenuItem.objects.filter(is_daily_special=True)
+class MenuCategoryViewSet(viewsets.ModelViewSet):
+    """
+    A viewset that provides default `create()`, `retrieve()`, `update()`,
+    `partial_update()`, `destroy()` and `list()` actions.
+    """
+    queryset = MenuCategory.objects.all()
+    serializer_class = MenuCategorySerializer
