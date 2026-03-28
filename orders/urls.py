@@ -1,10 +1,6 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import OrderViewSet
-
-router = DefaultRouter()
-router.register(r'orders', OrderViewSet)
+from django.urls import path
+from .views import OrderStatusUpdateView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('orders/<int:pk>/status/', OrderStatusUpdateView.as_view(), name='update-order-status'),
 ]
