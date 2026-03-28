@@ -1,20 +1,10 @@
-def booking_confirmation(request):
+from rest_framework import generics
+from .models import MenuItem
+from .serializers import MenuItemSerializer
 
-    email = "customer@email.com"
+class DailySpecialsListView(generics.ListAPIView):
+    serializer_class = MenuItemSerializer
 
-    subject = "Hotel Booking Confirmation"
-
-    message = """
-    Dear Customer,
-
-    Your hotel booking has been confirmed successfully.
-
-    Thank you for choosing our hotel.
-
-    Regards,
-    Hotel Management
-    """
-
-    send_email(email, subject, message)
-
-    return HttpResponse("Booking confirmed and email sent.")
+    def get_queryset(self):
+        # Filtering ORM for only specials
+        return MenuItem.objects.filter(is_daily_special=True)
