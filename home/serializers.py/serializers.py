@@ -1,13 +1,7 @@
 from rest_framework import serializers
-from .models import ContactFormSubmission
+from .models import MenuItem
 
-class ContactFormSubmissionSerializer(serializers.ModelSerializer):
-
+class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ContactFormSubmission
-        fields = ['id', 'name', 'email', 'message']
-
-    def validate_name(self, value):
-        if len(value) < 2:
-            raise serializers.ValidationError("Name must be at least 2 characters.")
-        return value
+        model = MenuItem
+        fields = ['id', 'name', 'price', 'is_daily_special']
