@@ -1,31 +1,33 @@
-import logging
-from django.shortcuts import get_object_or_404
-from django.core.exceptions import ObjectDoesNotExist
-from .models import Order
+from decimal import Decimal
 
-# Set up logger
-logger = logging.getLogger(__name__)
-
-def update_order_status(order_id, new_status):
+def calculate_order_total(order_items):
     """
-    Utility function to update the status of a specific order.
-    """
-    try:
-        # Retrieve the order
-        order = Order.objects.get(pk=order_id)
-        
-        old_status = order.status
-        order.status = new_status
-        order.save()
-
-        # Log the successful update
-        logger.info(f"Order {order_id} updated: {old_status} -> {new_status}")
-        return True, order
-
-    except Order.DoesNotExist:
-        logger.error(f"Failed to update status: Order {order_id} not found.")
-        return False, "Order not found"
+    Calculates the total cost for a list of order items.
     
-    except Exception as e:
-        logger.error(f"Unexpected error updating order {order_id}: {str(e)}")
-        return False, str(e)
+    Args:
+        order_items (list): A list of dictionaries or objects. 
+        Each must have 'price' and 'quantity' keys/attributes.
+        
+    Returns:
+        Decimal: The total sum of (price * quantity).
+    """
+    # Handle empty lists or None values gracefully
+    if not order_items:
+        return Decimal('0.00')
+
+    total = sum(
+        (Decimal(str(item.get('price', 0))) * item.get('quantity', 0))
+        for item in order_items
+    )
+    
+    # Quantize to 2 decimal places for currency consistency
+    return total.quanti                                 
+
+Example Usage
+
+items = [
+    {'price': 12.50, 'quantity': 2},
+    {'price': 5.00, 'quantity': 1}
+]
+
+print(calculate_order_total(items))  # Output: 30.00ze(Decimal('0.01'))
