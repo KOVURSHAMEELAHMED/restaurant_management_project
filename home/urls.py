@@ -1,11 +1,6 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import MenuCategoryViewSet
-
-# Routers automatically map the standard CRUD actions to URL patterns
-router = DefaultRouter()
-router.register(r'categories', MenuCategoryViewSet, basename='menucategory')
+from django.urls import path
+from .views import UserReviewListCreateView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('reviews/', UserReviewListCreateView.as_view(), name='review-list-create'),
 ]
