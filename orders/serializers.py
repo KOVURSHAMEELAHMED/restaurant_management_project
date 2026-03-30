@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Order
+from .models import MenuItem
 
-class OrderStatusSerializer(serializers.ModelSerializer):
+class MenuItemAvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
-        fields = ['status']
+        model = MenuItem
+        fields = ['is_available']
