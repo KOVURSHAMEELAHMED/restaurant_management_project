@@ -1,0 +1,6 @@
+from home.utils import calculate_discount
+
+class MenuItem(models.Model):
+    # ... fields ...
+    def get_final_price(self):
+        return calculate_discount(self.base_price, self.discount_percentage)
