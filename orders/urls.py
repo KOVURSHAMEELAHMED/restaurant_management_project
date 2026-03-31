@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import MenuCategoryListView
+from .views import ReviewCreateView
 
 urlpatterns = [
-    path('categories/', MenuCategoryListView.as_view(), name='category-list'),
+    path('reviews/create/', ReviewCreateView.as_view(), name='review-create'),
 ]
