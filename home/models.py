@@ -1,31 +1,18 @@
 from django.db import models
 
-class LoyaltyProgram(models.Model):
-    name = models.CharField(
-        max_length=100, 
-        unique=True, 
-        help_text="Unique name for the tier (e.g., Bronze, Silver, Gold)"
-    )
-    points_per_dollar_spent = models.DecimalField(
-        max_digits=5, 
-        decimal_places=2, 
-        default=1.00,
-        help_text="Points earned for every $1 spent"
-    )
-    description = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(
-        default=True,
-        help_text="Uncheck this to temporarily disable the program"
-    )
+class OpeningHour(models.Model):
+    WEEKDAYS = [
+        (0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'),
+        (3, 'Thursday'), (4, 'Friday'), (5, 'Saturday'), (6, 'Sunday'),
+    ]
     
-    # Timestamps
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    day = models.IntegerField(choices=WEEKDAYS, unique=True)
+    opening_time = models.TimeField()
+    closing_time = models.TimeField()
+    is_closed = models.BooleanField(default=False)  # For holidays or specific closed days
 
     class Meta:
-        verbose_name = "Loyalty Program"
-        verbose_name_plural = "Loyalty Programs"
-        ordering = ['-created_at']
+        ordering = ['day']
 
     def __str__(self):
-        return f"{self.name} ({self.points_per_dollar_spent} pts/$)"
+        return f"{self.get_day_display()}: {self.opening_time} - {self.closing_time}"
