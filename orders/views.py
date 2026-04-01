@@ -1,8 +1,16 @@
 from rest_framework import generics
-from .models import Order
-from .serializers import OrderStatusSerializer
+from .models import MenuItem
+from .serializers import MenuItemSearchSerializer
 
-class OrderStatusView(generics.RetrieveAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderStatusSerializer
-    lookup_field = 'short_id'  # This tells DRF to use short_id in the URL
+class MenuItemSearchView(generics.ListAPIView):
+    serializer_class = MenuItemSearchSerializer
+
+    def get_queryset(self):
+        queryset = MenuItem.objects.all()
+        query = self.request.query_params.get('q')
+        
+        if query:
+            # Case-insensitive search on the 'name' field
+            queryset = queryset.filter(name__icontains=query)
+            
+        return queryset
