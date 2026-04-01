@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import ReviewCreateView
+from .views import MenuItemSearchView
 
 urlpatterns = [
-    path('reviews/create/', ReviewCreateView.as_view(), name='review-create'),
+    # Usage: /api/menu/search/?q=pizza
+    path('api/menu/search/', MenuItemSearchView.as_view(), name='menu-item-search'),
 ]
