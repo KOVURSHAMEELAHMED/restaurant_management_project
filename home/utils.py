@@ -1,13 +1,33 @@
-from .models import MenuItem, Cuisine
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
-def get_distinct_cuisines():
+def is_valid_email(email):
     """
-    Retrieves a list of all unique cuisine names associated with 
-    the current menu items.
+    Validates an email address.
+    Returns True if valid, False otherwise.
     """
-    # Use values_list with flat=True to get a simple list of strings
-    # distinct() ensures no duplicates are returned
-    cuisines = MenuItem.objects.values_list('cuisine__name', flat=True).distinct()
+    if not email:
+        return False
+        
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+
+# re module 
+import re
+
+def is_valid_email(email):
+    """
+    Validates email format using a regular expression.
+    """
+    if not email:
+        return False
+        
+    # Standard email regex pattern
+    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     
-    # Convert the QuerySet to a standard Python list
-    return list(cuisines)
+    if re.match(email_regex, email):
+        return True
+    return False
