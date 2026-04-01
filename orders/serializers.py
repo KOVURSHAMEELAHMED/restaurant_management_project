@@ -1,9 +1,7 @@
 from rest_framework import serializers
-from .models import Review
+from .models import Order
 
-class ReviewSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username')
-
+class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Review
-        fields = ['id', 'username', 'rating', 'comment', 'created_at']
+        model = Order
+        fields = ['short_id', 'status', 'created_at']
