@@ -1,17 +1,10 @@
 from django.db import models
 
-class Order(models.Model):
-    STATUS_CHOICES = [
-        ('PENDING', 'Pending'),
-        ('PROCESSING', 'Processing'),
-        ('COMPLETED', 'Completed'),
-        ('CANCELLED', 'Cancelled'),
-    ]
-    
-    # Unique short ID from your previous utility
-    short_id = models.CharField(max_length=10, unique=True, editable=False)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
-    created_at = models.DateTimeField(auto_now_add=True)
+class MenuItem(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    image = models.ImageField(upload_url='menu_items/', blank=True, null=True)
 
     def __str__(self):
-        return f"Order {self.short_id} - {self.status}"
+        return self.name
