@@ -1,13 +1,9 @@
 from rest_framework import serializers
-from .models import UserReview
+from .models import OpeningHour
 
-class UserReviewSerializer(serializers.ModelSerializer):
+class OpeningHourSerializer(serializers.ModelSerializer):
+    day_name = serializers.CharField(source='get_day_display', read_only=True)
+
     class Meta:
-        model = UserReview
-        fields = ['id', 'menu_item', 'user', 'rating', 'comment', 'created_at']
-        read_only_fields = ['user', 'created_at']
-
-    def validate_rating(self, value):
-        if not (1 <= value <= 5):
-            raise serializers.ValidationError("Rating must be between 1 and 5.")
-        return value
+        model = OpeningHour
+        fields = ['day_name', 'opening_time', 'closing_time', 'is_closed']
