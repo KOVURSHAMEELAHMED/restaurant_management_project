@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import MenuItemSearchView
+from .views import MenuItemListView, MenuItemDetailView
 
 urlpatterns = [
-    # Usage: /api/menu/search/?q=pizza
-    path('api/menu/search/', MenuItemSearchView.as_view(), name='menu-item-search'),
+    path('api/menu-items/', MenuItemListView.as_view(), name='menu-item-list'),
+    # New detail endpoint
+    path('api/menu-items/<int:pk>/', MenuItemDetailView.as_view(), name='menu-item-detail'),
 ]
