@@ -1,3 +1,8 @@
 from django.test import TestCase
 
-# Create your tests here.
+# Replace 'Mexican' with a cuisine type in your database
+mexican_items = MenuItem.get_items_by_cuisine('Mexican')
+
+print(f"Found {mexican_items.count()} items.")
+for item in mexican_items:
+    print(item.name)
