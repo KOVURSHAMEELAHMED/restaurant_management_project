@@ -1,19 +1,28 @@
-from datetime import datetime, time
-
-def is_restaurant_open():
+def calculate_order_discount(order_total, discount_percentage):
     """
-    Checks if the restaurant is currently open.
-    Hours: 9:00 AM to 10:00 PM Daily.
-    """
-    now = datetime.now()
-    current_time = now.time()
-    
-    # Define opening and closing times
-    opening_time = time(9, 0)   # 9:00 AM
-    closing_time = time(22, 0)  # 10:00 PM (22:00)
+    Calculates the discount amount based on the order total and discount percentage.
 
-    # Check if current time is within the range
-    if opening_time <= current_time <= closing_time:
-        return True
+    Args:
+        order_total (float/int): The total amount of the order.
+        discount_percentage (float/int): The percentage discount to apply (e.g., 15 for 15%).
+
+    Returns:
+        float: The calculated discount amount.
     
-    return False
+    Raises:
+        ValueError: If inputs are not numeric or if percentage is outside 0-100.
+    """
+    try:
+        # Convert to float to handle strings if necessary and ensure numeric types
+        total = float(order_total)
+        percentage = float(discount_percentage)
+
+        if not (0 <= percentage <= 100):
+            raise ValueError("Discount percentage must be between 0 and 100.")
+
+        discount_amount = total * (percentage / 100)
+        return round(discount_amount, 2)
+
+    except (TypeError, ValueError) as e:
+        # Re-raise or handle the error for the calling function
+        raise ValueError(f"Invalid input for discount calculation: {e}")
