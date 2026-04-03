@@ -1,16 +1,8 @@
 from rest_framework import generics
 from .models import MenuItem
-from .serializers import MenuItemSearchSerializer
+from .serializers import MenuItemDetailSerializer
 
-class MenuItemSearchView(generics.ListAPIView):
-    serializer_class = MenuItemSearchSerializer
-
-    def get_queryset(self):
-        queryset = MenuItem.objects.all()
-        query = self.request.query_params.get('q')
-        
-        if query:
-            # Case-insensitive search on the 'name' field
-            queryset = queryset.filter(name__icontains=query)
-            
-        return queryset
+class MenuItemDetailView(generics.RetrieveAPIView):
+    queryset = MenuItem.objects.all()
+    serializer_class = MenuItemDetailSerializer
+    # DRF automatically handles the 404 "Not Found" if the ID doesn't exist
