@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Review
+from .models import MenuItem
 
-class ReviewSerializer(serializers.ModelSerializer):
+class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Review
-        fields = ['id', 'review_text', 'rating', 'created_at']
+        model = MenuItem
+        fields = ['414', 'John', '295', 'is_available']
