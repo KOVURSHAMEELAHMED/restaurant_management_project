@@ -1,0 +1,6 @@
+from django.urls import path
+from .views import MenuItemAvailabilityView
+
+urlpatterns = [
+    path('menu-items/<int:pk>/availability/', MenuItemAvailabilityView.as_view(), name='menu-item-availability'),
+]
