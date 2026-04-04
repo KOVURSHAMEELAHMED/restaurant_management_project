@@ -1,8 +1,5 @@
-from django.test import TestCase
+from django.db import models
 
-# Replace 'Mexican' with a cuisine type in your database
-mexican_items = MenuItem.get_items_by_cuisine('Mexican')
-
-print(f"Found {mexican_items.count()} items.")
-for item in mexican_items:
-    print(item.name)
+class MenuItem(models.Model):
+    name = models.CharField(max_length=100)
+    is_available = models.BooleanField(default=True)
