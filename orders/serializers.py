@@ -1,7 +1,14 @@
 from rest_framework import serializers
-from .models import MenuItem
+from .models import Order
 
-class MenuItemSerializer(serializers.ModelSerializer):
+class OrderStatusUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MenuItem
-        fields = ['id', 'name', 'description', 'price', 'is_available']
+        model = Order
+        fields = ['status']
+
+    def validate_status(self, value):
+        # Optional: Add custom logic (e.g., can't move from 'Completed' to 'Pending')
+        valid_statuses = [choice[0] for choice in Order.STATUS_CHOICES]
+        if value not in valid_statuses:
+            raise serializers.ValidationError("Invalid status selection.")
+        return value
