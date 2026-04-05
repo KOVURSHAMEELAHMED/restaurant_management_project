@@ -1,17 +1,14 @@
 from django.test import TestCase
-from .models import Order, OrderItem
-from home.models import MenuItem
-from decimal import Decimal
+from .models import Order
 
-class OrderModelTest(TestCase):
-    def test_calculate_total(self):
-        # Create a dummy menu item and order
-        burger = MenuItem.objects.create(name="Burger", price=10.00)
-        order = Order.objects.create()
+class OrderRevenueTest(TestCase):
+    def setUp(self):
+        # Create completed orders
+        Order.objects.create(total_amount=100.00, status='COMPLETED')
+        Order.objects.create(total_amount=50.00, status='COMPLETED')
+        # Create a pending order (should be ignored)
+        Order.objects.create(total_amount=75.00, status='PENDING')
 
-        # Add items to the order
-        OrderItem.objects.create(order=order, menu_item=burger, quantity=2, price=10.00)
-        OrderItem.objects.create(order=order, menu_item=burger, quantity=1, price=5.50)
-
-        # Expected: (2 * 10.00) + (1 * 5.50) = 25.50
-        self.assertEqual(order.calculate_total(), Decimal('25.50'))
+    def test_calculate_total_revenue(self):
+        total = Order.calculate_total_revenue()
+        self.assertEqual(total, 150.00)
