@@ -1,11 +1,10 @@
-from rest_framework import generics, permissions
-from .models import Order
-from .serializers import OrderHistorySerializer
+from rest_framework import generics
+from .models import MenuItem
+from .serializers import MenuItemSerializer
 
-class UserOrderHistoryView(generics.ListAPIView):
-    serializer_class = OrderHistorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+class AvailableMenuItemsView(generics.ListAPIView):
+    serializer_class = MenuItemSerializer
 
     def get_queryset(self):
-        # Only return orders belonging to the logged-in user
-        return Order.objects.filter(user=self.request.user).order_by('-date_ordered')
+        # Step 3: Return only items where is_available is True
+        return MenuItem.objects.filter(is_available=True)
