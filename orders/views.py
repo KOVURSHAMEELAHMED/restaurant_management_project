@@ -1,10 +1,9 @@
-from rest_framework import generics
-from .models import MenuItem
-from .serializers import MenuItemSerializer
+from rest_framework import generics, permissions
+from .models import Order
+from .serializers import OrderStatusUpdateSerializer
 
-class AvailableMenuItemsView(generics.ListAPIView):
-    serializer_class = MenuItemSerializer
-
-    def get_queryset(self):
-        # Step 3: Return only items where is_available is True
-        return MenuItem.objects.filter(is_available=True)
+class OrderStatusUpdateView(generics.UpdateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderStatusUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated] 
+    # Use [permissions.IsAdminUser] if only staff should change status
