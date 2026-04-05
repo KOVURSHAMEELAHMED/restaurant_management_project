@@ -1,8 +1,6 @@
 from django.urls import path
-from .views import MenuItemListView, MenuItemDetailView
+from .views import UserOrderHistoryView
 
 urlpatterns = [
-    path('api/menu-items/', MenuItemListView.as_view(), name='menu-item-list'),
-    # New detail endpoint
-    path('api/menu-items/<int:pk>/', MenuItemDetailView.as_view(), name='menu-item-detail'),
+    path('history/', UserOrderHistoryView.as_view(), name='user-order-history'),
 ]
