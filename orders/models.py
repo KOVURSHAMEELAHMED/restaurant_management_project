@@ -1,10 +1,12 @@
 from django.db import models
 
-class MenuItem(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    image = models.ImageField(upload_url='menu_items/', blank=True, null=True)
+class Order(models.Model):
+    # ... your existing fields ...
 
-    def __str__(self):
-        return self.name
+    def get_total_item_count(self):
+        """
+        Calculates and returns the total number of items in the order.
+        """
+        # This assumes your OrderItem model has a 'quantity' field 
+        # and a related_name of 'items' or 'orderitem_set'
+        return sum(item.quantity for item in self.items.all())
