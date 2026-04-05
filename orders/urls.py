@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import AvailableMenuItemsView
+from .views import OrderStatusUpdateView
 
 urlpatterns = [
-    path('menu/available/', AvailableMenuItemsView.as_view(), name='available-menu-items'),
+    path('order/<int:pk>/update-status/', OrderStatusUpdateView.as_view(), name='update-order-status'),
 ]
