@@ -1,7 +1,7 @@
 from rest_framework import generics
-from .models import MenuItem
-from .serializers import MenuItemSerializer
+from .models import FAQ
+from .serializers import FAQSerializer
 
-class MenuItemListView(generics.ListAPIView):
-    queryset = MenuItem.objects.all()
-    serializer_class = MenuItemSerializer
+class FAQListView(generics.ListAPIView):
+    queryset = FAQ.objects.all().order_by('-created_at')
+    serializer_class = FAQSerializer
