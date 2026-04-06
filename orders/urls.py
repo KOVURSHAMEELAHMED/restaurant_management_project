@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import OrderStatusUpdateView
+from .views import ReviewListView
 
 urlpatterns = [
-    path('order/<int:pk>/update-status/', OrderStatusUpdateView.as_view(), name='update-order-status'),
+    path('api/reviews/', ReviewListView.as_view(), name='review-list'),
 ]
