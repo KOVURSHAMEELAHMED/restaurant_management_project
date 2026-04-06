@@ -1,13 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class MenuItem(models.Model):
-    name = models.CharField(max_length=100)
-    cuisine = models.CharField(max_length=50) # Assuming this field exists
-    # ... other fields ...
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField() # e.g., 1-5
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    @classmethod
-    def get_items_by_cuisine(cls, cuisine_type):
-        """
-        Returns a QuerySet of menu items filtered by the given cuisine_type.
-        """
-        return cls.objects.filter(cuisine__iexact=cuisine_type)
+    def __str__(self):
+        return f"{self.user.username} - {self.rating} Stars"
