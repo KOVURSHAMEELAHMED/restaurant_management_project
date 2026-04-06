@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import RestaurantHoursView
+from .views import FAQListView
 
 urlpatterns = [
-    # ... existing paths ...
-    path('api/hours/', RestaurantHoursView.as_view(), name='restaurant-hours'),
+    # ... your other paths ...
+    path('api/faqs/', FAQListView.as_view(), name='faq-list'),
 ]
