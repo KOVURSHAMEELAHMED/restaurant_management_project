@@ -1,13 +1,21 @@
 from django.contrib import admin
-from .models import Coupon
+from .models import MenuItem
 
-@admin.register(Coupon)
-class CouponAdmin(admin.ModelAdmin):
-    # Displays the toggle in the list view
-    list_display = ('code', 'discount', 'is_active') 
-    
-    # Allows you to toggle it without clicking into the coupon details
-    list_editable = ('is_active',) 
-    
-    # Adds a sidebar filter for quick management
-    list_filter = ('is_active',)
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'is_available')
+    # Add the custom action name to the actions list
+    actions = ['make_unavailable']
+
+    @admin.action(description="Mark selected items as unavailable")
+    def make_unavailable(self, request, queryset):
+        """
+        Updates the is_available field to False for all selected items.
+        """
+        updated_count = queryset.update(is_available=False)
+        
+        # Optional: Send a success message to the admin interface
+        self.message_user(
+            request, 
+            f"Successfully marked {updated_count} items as unavailable."
+        )
