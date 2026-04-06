@@ -1,33 +1,23 @@
-from decimal import Decimal
+from django.db.models import Avg
 
-def calculate_order_total(order_items):
+def calculate_average_rating(reviews_queryset):
     """
-    Calculates the total cost for a list of order items.
-    
-    Args:
-        order_items (list): A list of dictionaries or objects. 
-        Each must have 'price' and 'quantity' keys/attributes.
+    Calculates the average rating from a QuerySet of reviews.
+    Returns 0.0 if the QuerySet is empty.
+    """
+    # 1. Handle cases with no reviews (Requirement 2)
+    count = reviews_queryset.count()
+    if count == 0:
+        return 0.0
+
+    try:
+        # 2 & 3. Sum up ratings and calculate average (Requirement 3)
+        # Using a loop as requested, though aggregate() is faster for large sets
+        total_sum = sum(review.rating for review in reviews_queryset)
+        average = total_sum / count
         
-    Returns:
-        Decimal: The total sum of (price * quantity).
-    """
-    # Handle empty lists or None values gracefully
-    if not order_items:
-        return Decimal('0.00')
+        return float(average)
 
-    total = sum(
-        (Decimal(str(item.get('price', 0))) * item.get('quantity', 0))
-        for item in order_items
-    )
-    
-    # Quantize to 2 decimal places for currency consistency
-    return total.quanti                                 
-
-Example Usage
-
-items = [
-    {'price': 12.50, 'quantity': 2},
-    {'price': 5.00, 'quantity': 1}
-]
-
-print(calculate_order_total(items))  # Output: 30.00ze(Decimal('0.01'))
+    except (TypeError, ZeroDivisionError, AttributeError):
+        # 4. Graceful error handling (Requirement 4)
+        return 0.0
