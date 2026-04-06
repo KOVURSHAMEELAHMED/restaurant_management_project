@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import FAQListView
+from .views import MenuItemCountView
 
 urlpatterns = [
-    # ... your other paths ...
-    path('api/faqs/', FAQListView.as_view(), name='faq-list'),
+    path('api/menu/count/', MenuItemCountView.as_view(), name='menu-item-count'),
 ]
