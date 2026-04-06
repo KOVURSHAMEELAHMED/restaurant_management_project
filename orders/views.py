@@ -1,9 +1,7 @@
-from rest_framework import generics, permissions
-from .models import Order
-from .serializers import OrderStatusUpdateSerializer
+from rest_framework import generics
+from .models import Review
+from .serializers import ReviewSerializer
 
-class OrderStatusUpdateView(generics.UpdateAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderStatusUpdateSerializer
-    permission_classes = [permissions.IsAuthenticated] 
-    # Use [permissions.IsAdminUser] if only staff should change status
+class ReviewListView(generics.ListAPIView):
+    queryset = Review.objects.all().order_by('-created_at')
+    serializer_class = ReviewSerializer
