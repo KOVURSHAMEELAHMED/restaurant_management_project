@@ -1,7 +1,13 @@
-from rest_framework import generics
-from .models import FAQ
-from .serializers import FAQSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import MenuItem
 
-class FAQListView(generics.ListAPIView):
-    queryset = FAQ.objects.all().order_by('-created_at')
-    serializer_class = FAQSerializer
+class MenuItemCountView(APIView):
+    """
+    Returns the total count of currently available menu items.
+    """
+    def get(self, request):
+        # Filter for active items and count them
+        count = MenuItem.objects.filter(is_available=True).count()
+        
+        return Response({'total_menu_items': count})
