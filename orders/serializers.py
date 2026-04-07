@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import Review
+from .models import MenuItem
 
-class ReviewSerializer(serializers.ModelSerializer):
-    # This pulls the 'username' from the related User model
-    user_name = serializers.ReadOnlyField(source='user.username')
+class MenuItemSerializer(serializers.ModelSerializer):
+    # This displays the category's __str__ representation instead of just an ID
+    category = serializers.StringRelatedField() 
 
     class Meta:
-        model = Review
-        fields = ['id', 'user_name', 'rating', 'comment', 'created_at']
+        model = MenuItem
+        fields = ['id', 'name', 'description', 'price', 'category']
