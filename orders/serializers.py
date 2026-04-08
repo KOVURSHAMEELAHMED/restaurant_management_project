@@ -1,10 +1,7 @@
 from rest_framework import serializers
-from .models import MenuItem
+from .models import MenuCategory
 
-class MenuItemSerializer(serializers.ModelSerializer):
-    # This displays the category's __str__ representation instead of just an ID
-    category = serializers.StringRelatedField() 
-
+class MenuCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = MenuItem
-        fields = ['id', 'name', 'description', 'price', 'category']
+        model = MenuCategory
+        fields = ['id', 'name']
