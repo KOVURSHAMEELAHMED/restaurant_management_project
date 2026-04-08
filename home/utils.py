@@ -1,34 +1,81 @@
-from datetime import datetime
-from .models import DailyOperatingHours
+from django.db.models import Q
+from .models import Table  # Assuming you have a Table model
 
-def is_reservation_time_valid(proposed_datetime):
+def get_available_tables_by_capacity(num_guests):
     """
-    Validates if a proposed reservation time falls within the restaurant's
-    operating hours for that specific day of the week.
-    """
-    # 1. Get the day of the week (0 = Monday, 6 = Sunday)
-    day_index = proposed_datetime.weekday()
+    Filter available tables based on required capacity.
     
-    # 2. Map index to your model's day format (assuming standard names)
-    days = [
-        'Monday', 'Tuesday', 'Wednesday', 'Thursday', 
-        'Friday', 'Saturday', 'Sunday'
-    ]
-    target_day = days[day_index]
-
-    try:
-        # 3. Look up the operating hours for that day
-        hours = DailyOperatingHours.objects.get(day=target_day)
+    Args:
+        num_guests (int): The number of guests to accommodate
         
-        # 4. Check if the proposed time is between opening and closing
-        # proposed_datetime.time() extracts only the time part for comparison
-        reservation_time = proposed_datetime.time()
+    Returns:
+        QuerySet: A Django QuerySet containing Table objects that are available
+                 and have capacity >= num_guests
         
-        if hours.opening_time <= reservation_time <= hours.closing_time:
-            return True
-            
-    except DailyOperatingHours.DoesNotExist:
-        # If no hours are defined for that day, assume closed
-        return False
+    Example:
+        >>> available_tables = get_available_tables_by_capacity(4)
+        >>> for table in available_tables:
+        ...     print(f"Table {table.table_number}: Capacity {table.capacity}")
+    """
+    # Validate input
+    if not isinstance(num_guests, int) or num_guests <= 0:
+        return Table.objects.none()  # Return empty queryset for invalid input
+    
+    # Query for available tables with sufficient capacity
+    available_tables = Table.objects.filter(
+        is_available=True,
+        capacity__gte=num_guests  # gte = greater than or equal to
+    ).order_by('capacity', 'table_number')  # Order by capacity then table number
+    
+    return available_tables
 
-    return False
+
+# Optional: Add additional utility functions for more complex scenarios
+def get_available_tables_by_capacity_and_preferences(num_guests, **preferences):
+    """
+    Extended function that filters tables based on capacity and additional preferences.
+    
+    Args:
+        num_guests (int): The number of guests to accommodate
+        **preferences: Additional filters like location, table_type, etc.
+        
+    Returns:
+        QuerySet: Filtered Table objects matching all criteria
+    """
+    if not isinstance(num_guests, int) or num_guests <= 0:
+        return Table.objects.none()
+    
+    # Start with base query
+    query = Table.objects.filter(
+        is_available=True,
+        capacity__gte=num_guests
+    )
+    
+    # Apply additional filters if provided
+    if preferences:
+        query = query.filter(**preferences)
+    
+    return query.order_by('capacity', 'table_number')
+
+
+def get_best_available_table(num_guests):
+    """
+    Find the best available table for the given number of guests.
+    Returns the table with minimum excess capacity (most efficient fit).
+    
+    Args:
+        num_guests (int): The number of guests to accommodate
+        
+    Returns:
+        Table or None: The best matching table or None if no table available
+    """
+    available_tables = get_available_tables_by_capacity(num_guests)
+    
+    if not available_tables.exists():
+        return None
+    
+    # Find the table with the smallest capacity that still meets the requirement
+    # This is the most efficient use of table space
+    best_table = available_tables.order_by('capacity').first()
+    
+    return best_table
