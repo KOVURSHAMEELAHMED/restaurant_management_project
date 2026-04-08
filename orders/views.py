@@ -1,14 +1,7 @@
 from rest_framework import viewsets
-from .models import MenuItem
-from .serializers import MenuItemSerializer
+from .models import MenuCategory
+from .serializers import MenuCategorySerializer
 
-class MenuItemViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = MenuItemSerializer
-
-    def get_queryset(self):
-        queryset = MenuItem.objects.all()
-        # Optional filtering: ?category=Dessert
-        category = self.request.query_params.get('category')
-        if category:
-            queryset = queryset.filter(category__name__iexact=category)
-        return queryset
+class MenuCategoryViewSet(viewsets.ModelViewSet):
+    queryset = MenuCategory.objects.all()
+    serializer_class = MenuCategorySerializer
