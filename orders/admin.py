@@ -1,26 +1,13 @@
+from django.contrib import admin
+from .models import MenuItem
 
-from django.contrib import admin, messages
-from .models import Order
-
-@admin.action(description="Mark selected orders as Processed")
-def mark_orders_processed(modeladmin, request, queryset):
-    """
-    Updates the status of selected orders to 'Processed'.
-    """
-    # Bulk update for efficiency
-    updated_count = queryset.update(status='Processed')
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'category', 'is_available', 'allergens')
+    list_filter = ('category', 'is_available')
+    search_fields = ('name', 'description', 'allergens')
+    list_editable = ('price', 'is_available')
     
-    # Provide feedback to the admin user
-    modeladmin.message_user(
-        request, 
-        f"Successfully marked {updated_count} orders as processed.",
-        messages.SUCCESS
-    )
+    # If using ManyToManyField with Allergen model:
+    # filter_horizontal = ('allergens',)
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    # List the fields you want to see in the admin table
-    list_display = ['id', 'customer', 'status', 'created_at']
-    
-    # Register the custom action here
-    actions = [mark_orders_processed]
+admin.site.register(MenuItem, MenuItemAdmin)
