@@ -1,13 +1,24 @@
-from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
-from .models import MenuItem
+from rest_framework.views import APIView
+from .models import Table
+from .serializers import TableSerializer
 
-class MenuItemCountView(APIView):
-    """
-    Returns the total count of currently available menu items.
-    """
+# Option 1: Using ListAPIView (simpler, recommended)
+class TableListView(generics.ListAPIView):
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
+
+# Option 2: Using APIView (more control)
+class TableListAPIView(APIView):
     def get(self, request):
-        # Filter for active items and count them
-        count = MenuItem.objects.filter(is_available=True).count()
-        
-        return Response({'total_menu_items': count})
+        tables = Table.objects.all()
+        serializer = TableSerializer(tables, many=True)
+        return Response(serializer.data)
+
+# Option 3: Only show available tables
+class AvailableTablesView(generics.ListAPIView):
+    serializer_class = TableSerializer
+    
+    def get_queryset(self):
+        return Table.objects.filter(is_available=True)
