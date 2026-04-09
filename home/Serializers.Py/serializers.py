@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import OpeningHour
+from .models import Table
 
-class OpeningHourSerializer(serializers.ModelSerializer):
-    day_name = serializers.CharField(source='get_day_display', read_only=True)
-
+class TableSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OpeningHour
-        fields = ['day_name', 'opening_time', 'closing_time', 'is_closed']
+        model = Table
+        fields = '__all__'  # Includes all fields from the Table model
+        # OR specify fields explicitly:
+        # fields = ['id', 'table_number', 'capacity', 'is_available', 'location']
