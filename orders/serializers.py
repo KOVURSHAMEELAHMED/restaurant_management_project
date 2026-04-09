@@ -1,9 +1,12 @@
 from rest_framework import serializers
-from .models import MenuItem
+from .models import Order
 
-class MenuItemSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MenuItem
-        fields = '__all__'  # This will automatically include the new allergens field
+        model = Order
+        fields = '__all__'  # This will automatically include customer_notes
         # OR explicitly list fields:
-        # fields = ['id', 'name', 'description', 'price', 'category', 'is_available', 'allergens']
+        # fields = ['id', 'order_number', 'customer_name', 'customer_email', 
+        #          'customer_phone', 'order_date', 'total_amount', 'status', 
+        #          'customer_notes', 'created_at', 'updated_at']
+        read_only_fields = ['order_number', 'created_at', 'updated_at']
