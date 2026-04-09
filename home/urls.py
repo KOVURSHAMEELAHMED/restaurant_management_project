@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import MenuItemCountView
+from . import views
 
 urlpatterns = [
-    path('api/menu/count/', MenuItemCountView.as_view(), name='menu-item-count'),
+    path('api/tables/', views.TableListView.as_view(), name='table-list'),
+    # Optional: Only available tables endpoint
+    path('api/tables/available/', views.AvailableTablesView.as_view(), name='available-tables'),
 ]
