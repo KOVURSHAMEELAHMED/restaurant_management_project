@@ -1,26 +1,15 @@
-import logging
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from . import views
 
-# Set up logging to capture unexpected errors
-logger = logging.getLogger(__name__)
+# For ListAPIView
+urlpatterns = [
+    path('api/cuisines/', views.CuisineListView.as_view(), name='cuisine-list'),
+]
 
-def is_valid_email(email: str) -> bool:
-    """
-    Validates an email address using Django's built-in validator.
-    Returns True if valid, False if invalid or upon error.
-    """
-    if not email or not isinstance(email, str):
-        return False
-        
-    try:
-        # Django's built-in function raises a ValidationError if invalid
-        validate_email(email)
-        return True
-    except ValidationError:
-        # Standard invalid format (e.g., missing @ or domain)
-        return False
-    except Exception as e:
-        # Handle and log potential unexpected exceptions to avoid crashes
-        logger.error(f"Unexpected error validating email '{email}': {e}")
-        return False
+# If using ViewSet, you would do:
+# router = DefaultRouter()
+# router.register(r'api/cuisines', views.CuisineViewSet, basename='cuisine')
+# urlpatterns = [
+#     path('', include(router.urls)),
+# ]
