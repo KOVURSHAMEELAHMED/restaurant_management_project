@@ -1,31 +1,30 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import Restaurant, Table, Cuisine
 
-# Inline admin for UserProfile
-class UserProfileInline(admin.StackedInline):
-    model = UserProfile
-    can_delete = False
-    verbose_name_plural = 'Profile'
+# Register Restaurant model
+admin.site.register(Restaurant)
 
-# Extend UserAdmin to include profile fields
-class CustomUserAdmin(UserAdmin):
-    inlines = (UserProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'last_name', 'get_preferred_cuisine', 'is_staff')
+# Register Table model with custom admin
+@admin.register(Table)
+class TableAdmin(admin.ModelAdmin):
+    list_display = ('table_number', 'capacity', 'is_available')
+    list_editable = ('is_available',)
+    list_filter = ('is_available', 'capacity')
+    search_fields = ('table_number',)
+
+# Register Cuisine model with custom admin
+@admin.register(Cuisine)
+class CuisineAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'created_at')
+    list_display_links = ('name',)
+    search_fields = ('name',)
+    list_filter = ('created_at',)
+    ordering = ('name',)
     
-    def get_preferred_cuisine(self, obj):
-        return obj.profile.preferred_cuisine
-    get_preferred_cuisine.short_description = 'Preferred Cuisine'
-
-# Register the custom admin
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
-
-# Or simply register UserProfile alone
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'preferred_cuisine', 'created_at')
-    list_filter = ('preferred_cuisine',)
-    search_fields = ('user__username', 'user__email', 'preferred_cuisine')
-    raw_id_fields = ('user',)
+    # For enhanced version with more fields
+    # list_display = ('id', 'name', 'is_active', 'created_at')
+    # list_filter = ('is_active', 'created_at')
+    # list_editable = ('is_active',)
+    
+    fields = ('name',)  # For basic version
+    # fields = ('name', 'description', 'is_active')  # For enhanced version
