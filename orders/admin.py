@@ -1,34 +1,22 @@
 from django.contrib import admin
-from .models import Order
+from .models import Restaurant, Table
 
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_number', 'customer_name', 'order_date', 'status', 'total_amount', 'has_notes')
-    list_filter = ('status', 'order_date')
-    search_fields = ('order_number', 'customer_name', 'customer_email', 'customer_phone', 'customer_notes')
-    list_editable = ('status',)
-    readonly_fields = ('order_number', 'created_at', 'updated_at')
-    
-    fieldsets = (
-        ('Order Information', {
-            'fields': ('order_number', 'customer_name', 'customer_email', 'customer_phone')
-        }),
-        ('Order Details', {
-            'fields': ('total_amount', 'status')
-        }),
-        ('Customer Notes', {
-            'fields': ('customer_notes',),
-            'classes': ('wide',),
-            'description': 'Any special instructions, delivery notes, or allergy information from the customer'
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
-    )
-    
-    def has_notes(self, obj):
-        return bool(obj.customer_notes)
-    has_notes.boolean = True
-    has_notes.short_description = 'Has Notes'
+# Simple registration
+admin.site.register(Restaurant)
+admin.site.register(Table)
 
-admin.site.register(Order, OrderAdmin)
+# OR with custom admin interface for better management (Recommended)
+@admin.register(Restaurant)
+class RestaurantAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'description')
+    search_fields = ('name',)
+
+@admin.register(Table)
+class TableAdmin(admin.ModelAdmin):
+    list_display = ('table_number', 'capacity', 'is_available', 'location')
+    list_display_links = ('table_number',)
+    list_editable = ('is_available',)  # Allow editing availability directly from list view
+    list_filter = ('is_available', 'location', 'capacity')
+    search_fields = ('table_number', 'location')
+    list_per_page = 25
+    fields = ('table_number', 'capacity', 'location', 'is_available')
