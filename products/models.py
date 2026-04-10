@@ -1,27 +1,44 @@
 from django.db import models
+from django.utils import timezone
 
-class Restaurant(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
+class Order(models.Model):
+    # Define status choices as constants
+    STATUS_PENDING = 'PENDING'
+    STATUS_CONFIRMED = 'CONFIRMED'
+    STATUS_PREPARING = 'PREPARING'
+    STATUS_COMPLETED = 'COMPLETED'
+    STATUS_CANCELLED = 'CANCELLED'
+    
+    STATUS_CHOICES = [
+        (STATUS_PENDING, 'Pending'),
+        (STATUS_CONFIRMED, 'Confirmed'),
+        (STATUS_PREPARING, 'Preparing'),
+        (STATUS_COMPLETED, 'Completed'),
+        (STATUS_CANCELLED, 'Cancelled'),
+    ]
+    
+    # Order fields
+    order_number = models.CharField(max_length=20, unique=True)
+    customer_name = models.CharField(max_length=100)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    
+    # Other fields like items, total_amount, etc.
+    # ...
+    
+    def mark_as_completed(self):
+        """
+        Mark the order as completed.
+        Updates the status to 'COMPLETED' and sets the completed_at timestamp.
+        """
+        self.status = self.STATUS_COMPLETED
+        self.completed_at = timezone.now()
+        self.save()
     
     def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = "Restaurant"
-        verbose_name_plural = "Restaurants"
-
-
-class Table(models.Model):
-    table_number = models.IntegerField(unique=True, help_text="Unique number identifying the table")
-    capacity = models.IntegerField(help_text="Maximum number of people the table can seat")
-    is_available = models.BooleanField(default=True, help_text="Is the table currently available?")
-    location = models.CharField(max_length=100, help_text="Table location (e.g., Window Side, Patio, Main Dining Room)")
-    
-    def __str__(self):
-        return f"Table {self.table_number} (Capacity: {self.capacity})"
-    
-    class Meta:
-        verbose_name = "Table"
-        verbose_name_plural = "Tables"
-        ordering = ['table_number']  # Orders tables by their number by default
+        return f"Order {self.order_number} - {self.status}"
