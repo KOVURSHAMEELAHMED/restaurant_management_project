@@ -1,12 +1,8 @@
 from rest_framework import serializers
-from .models import Order
+from .models import UserReview
 
-class OrderSerializer(serializers.ModelSerializer):
+class UserReviewSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
-        fields = '__all__'  # This will automatically include customer_notes
-        # OR explicitly list fields:
-        # fields = ['id', 'order_number', 'customer_name', 'customer_email', 
-        #          'customer_phone', 'order_date', 'total_amount', 'status', 
-        #          'customer_notes', 'created_at', 'updated_at']
-        read_only_fields = ['order_number', 'created_at', 'updated_at']
+        model = UserReview
+        fields = ['id', 'rating', 'comment', 'menu_item']
+        read_only_fields = ['user'] # User is taken from the request context
