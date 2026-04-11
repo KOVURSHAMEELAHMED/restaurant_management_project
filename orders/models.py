@@ -1,12 +1,12 @@
 from django.db import models
 
-class Table(models.Model):
-    # ... existing fields (like table_number) ...
+class MenuItem(models.Model):
+    # ... your existing fields (name, price, etc.) ...
     
-    max_seats = models.IntegerField(
-        default=4,
-        help_text="Maximum number of customers for this table."
+    is_gluten_free = models.BooleanField(
+        default=False, 
+        help_text='Indicates if the menu item is gluten-free.'
     )
 
     def __str__(self):
-        return f"Table {self.id} ({self.max_seats} seats)"
+        return self.name
