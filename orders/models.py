@@ -1,21 +1,12 @@
 from django.db import models
 
-class DeliveryZone(models.Model):
-    name = models.CharField(
-        max_length=100, 
-        unique=True
-    )
-    min_order_amount = models.DecimalField(
-        max_digits=10, 
-        decimal_places=2
-    )
-    delivery_fee = models.DecimalField(
-        max_digits=10, 
-        decimal_places=2
-    )
-    is_active = models.BooleanField(
-        default=True
+class Table(models.Model):
+    # ... existing fields (like table_number) ...
+    
+    max_seats = models.IntegerField(
+        default=4,
+        help_text="Maximum number of customers for this table."
     )
 
     def __str__(self):
-        return self.name
+        return f"Table {self.id} ({self.max_seats} seats)"
