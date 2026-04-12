@@ -1,12 +1,14 @@
 from django.db import models
+from datetime import date
 
-class MenuItem(models.Model):
-    # ... your existing fields (name, price, etc.) ...
-    
-    is_gluten_free = models.BooleanField(
-        default=False, 
-        help_text='Indicates if the menu item is gluten-free.'
-    )
+class DailySpecial(models.Model):
+    # Links to MenuItem or RestaurantMenu
+    menu_item = models.ForeignKey('MenuItem', on_delete=models.CASCADE)
+    date = models.DateField()
+
+    class Meta:
+        # Ensures a menu item isn't listed twice for the same date
+        unique_together = (('menu_item', 'date'),)
 
     def __str__(self):
-        return self.name
+        return f"{self.menu_item.name} special on {self.date}"
