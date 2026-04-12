@@ -1,12 +1,7 @@
-
 from rest_framework import serializers
-from .models import Cuisine
+from .models import Feedback
 
-class CuisineSerializer(serializers.ModelSerializer):
-    """Serializer for Cuisine model to convert to/from JSON"""
-    
+class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cuisine
-        fields = ['id', 'name']  # Include both id and name fields
-        # Or use: fields = '__all__' to include all fields
-        # Or exclude: exclude = ['created_at']
+        model = Feedback
+        fields = '__all__'  # or specify fields: ['id', 'user', 'message', 'created_at']
