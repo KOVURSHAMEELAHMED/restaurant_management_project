@@ -1,12 +1,11 @@
-from rest_framework import generics, permissions
-from .models import UserReview
-from .serializers import UserReviewSerializer
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserLoyaltySerializer
 
-class MenuItemReviewCreateView(generics.CreateAPIView):
-    queryset = UserReview.objects.all()
-    serializer_class = UserReviewSerializer
-    permission_classes = [permissions.IsAuthenticated]
+class UserLoyaltyView(generics.RetrieveAPIView):
+    serializer_class = UserLoyaltySerializer
+    permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        # Automatically associate the logged-in user with the review
-        serializer.save(user=self.request.user)
+    def get_object(self):
+        # Returns the user profile/model of the person logged in
+        return self.request.user
