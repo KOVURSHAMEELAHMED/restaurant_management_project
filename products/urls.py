@@ -1,15 +1,6 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from . import views
+from django.urls import path
+from .api_views import FeedbackListView
 
-# For ListAPIView
 urlpatterns = [
-    path('api/cuisines/', views.CuisineListView.as_view(), name='cuisine-list'),
+    path('api/feedback/', FeedbackListView.as_view(), name='feedback-list'),
 ]
-
-# If using ViewSet, you would do:
-# router = DefaultRouter()
-# router.register(r'api/cuisines', views.CuisineViewSet, basename='cuisine')
-# urlpatterns = [
-#     path('', include(router.urls)),
-# ]
