@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import UserReview
+from django.contrib.auth import get_user_model
 
-class UserReviewSerializer(serializers.ModelSerializer):
+User = get_user_model()
+
+class UserLoyaltySerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserReview
-        fields = ['id', 'rating', 'comment', 'menu_item']
-        read_only_fields = ['user'] # User is taken from the request context
+        model = User
+        fields = ['loyalty_points']
