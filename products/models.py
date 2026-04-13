@@ -1,44 +1,18 @@
 from django.db import models
-from django.utils import timezone
 
-class Order(models.Model):
-    # Define status choices as constants
-    STATUS_PENDING = 'PENDING'
-    STATUS_CONFIRMED = 'CONFIRMED'
-    STATUS_PREPARING = 'PREPARING'
-    STATUS_COMPLETED = 'COMPLETED'
-    STATUS_CANCELLED = 'CANCELLED'
-    
-    STATUS_CHOICES = [
-        (STATUS_PENDING, 'Pending'),
-        (STATUS_CONFIRMED, 'Confirmed'),
-        (STATUS_PREPARING, 'Preparing'),
-        (STATUS_COMPLETED, 'Completed'),
-        (STATUS_CANCELLED, 'Cancelled'),
-    ]
-    
-    # Order fields
-    order_number = models.CharField(max_length=20, unique=True)
-    customer_name = models.CharField(max_length=100)
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default=STATUS_PENDING
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    completed_at = models.DateTimeField(null=True, blank=True)
-    
-    # Other fields like items, total_amount, etc.
-    # ...
-    
-    def mark_as_completed(self):
+class CustomerProfile(models.Model):
+    # ... existing fields (first_name, last_name, etc.) ...
+
+    def get_full_name(self):
         """
-        Mark the order as completed.
-        Updates the status to 'COMPLETED' and sets the completed_at timestamp.
+        Returns the combined first and last name, 
+        handling empty or None values gracefully.
         """
-        self.status = self.STATUS_COMPLETED
-        self.completed_at = timezone.now()
-        self.save()
-    
+        # Filter out None or empty strings, then join with a space
+        parts = [self.first_name, self.last_name]
+        full_name = " ".join(filter(None, parts))
+        
+        return full_name.strip() or "Unnamed User"
+
     def __str__(self):
-        return f"Order {self.order_number} - {self.status}"
+        return self.get_full_name()
