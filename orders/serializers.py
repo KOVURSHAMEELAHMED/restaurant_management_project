@@ -1,9 +1,7 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from .models import Ingredient
 
-User = get_user_model()
-
-class UserLoyaltySerializer(serializers.ModelSerializer):
+class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['loyalty_points']
+        model = Ingredient
+        fields = ['id', 'name', 'unit_of_measure']
