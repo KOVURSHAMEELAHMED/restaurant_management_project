@@ -1,10 +1,7 @@
-from rest_framework import generics
-from .models import Table
-from .serializers import TableSerializer
+from rest_framework import viewsets
+from .models import Ingredient
+from .serializers import IngredientSerializer
 
-class TableListView(generics.ListAPIView):
-    """
-    API endpoint that allows tables to be listed.
-    """
-    queryset = Table.objects.all()
-    serializer_class = TableSerializer
+class IngredientViewSet(viewsets.ModelViewSet):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
