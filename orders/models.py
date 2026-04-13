@@ -1,12 +1,9 @@
 from django.db import models
 
-class MenuItem(models.Model):
-    # ... existing fields (name, price, etc.) ...
-    
-    is_featured = models.BooleanField(
-        default=False, 
-        help_text="Mark this item as featured to highlight it on the website or promotions."
-    )
+class Table(models.Model):
+    table_number = models.IntegerField(unique=True)
+    capacity = models.IntegerField()
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return f"Table {self.table_number} (Capacity: {self.capacity})"
