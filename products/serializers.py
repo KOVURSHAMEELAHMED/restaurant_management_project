@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Feedback
+from .models import Table
 
-class FeedbackSerializer(serializers.ModelSerializer):
+class TableSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Feedback
-        fields = '__all__'  # or specify fields: ['id', 'user', 'message', 'created_at']
+        model = Table
+        fields = '__all__'
