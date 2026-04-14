@@ -39,3 +39,10 @@ class Table(models.Model):
         verbose_name = "Table"
         verbose_name_plural = "Tables"
         ordering = ['table_number']  # Orders tables by their number by default
+
+        from .utils import estimate_table_turnover_time
+
+# Example usage in a View or Model method
+capacity = 4
+duration = estimate_table_turnover_time(capacity)
+print(f"Estimated turnover: {duration} minutes")
