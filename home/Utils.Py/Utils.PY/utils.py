@@ -1,22 +1,10 @@
-import re
-
-def format_phone_number(phone_str):
+def estimate_table_turnover_time(table_capacity):
     """
-    Cleans a string and formats it as (XXX) XXX-XXXX.
-    Returns the original string if it doesn't contain exactly 10 digits.
+    Estimates the dining duration in minutes based on table size.
     """
-    try:
-        # Step 3: Remove all non-numeric characters
-        numeric_filter = re.compile(r'[^\d]')
-        clean_number = numeric_filter.sub('', str(phone_str))
-
-        # Step 2: Format if we have a standard 10-digit number
-        if len(clean_number) == 10:
-            return f"({clean_number[:3]}) {clean_number[3:6]}-{clean_number[6:]}"
-        
-        # Return as-is if it's an extension or international (handle gracefully)
-        return phone_str
-
-    except (ValueError, TypeError):
-        # Step 3: Handle invalid inputs (like None or non-string objects)
-        return ""
+    if table_capacity <= 2:
+        return 60
+    elif table_capacity <= 4:
+        return 90
+    else:
+        return 120
