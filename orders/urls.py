@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import FeaturedMenuItemsAPIView
+from .views import UpdateOrderItemQuantityView
 
 urlpatterns = [
-    path('api/menu/featured/', FeaturedMenuItemsAPIView.as_view(), name='featured-menu-items'),
+    # Example: /api/order-items/123/update-quantity/
+    path('order-items/<int:pk>/update-quantity/', UpdateOrderItemQuantityView.as_view(), name='update-order-item'),
 ]
