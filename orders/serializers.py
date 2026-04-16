@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import MenuItem
 
 class MenuItemSerializer(serializers.ModelSerializer):
-    class __all__:
+    class Meta:
         model = MenuItem
-        fields = '__all__' # Or list specific fields like ['id', 'name', 'price', 'description']
+        # Add 'is_vegetarian' to the tuple below
+        fields = ['id', 'name', 'price', 'is_vegetarian'] 
+        # Or use fields = '__all__' to include all fields automatically
