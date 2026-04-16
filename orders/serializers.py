@@ -1,9 +1,13 @@
 from rest_framework import serializers
-from .models import MenuItem
+from .models import OrderItem
 
-class MenuItemSerializer(serializers.ModelSerializer):
+class OrderItemUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MenuItem
-        # Add 'is_vegetarian' to the tuple below
-        fields = ['id', 'name', 'price', 'is_vegetarian'] 
-        # Or use fields = '__all__' to include all fields automatically
+        model = OrderItem
+        fields = ['id', 'quantity']
+        extra_kwargs = {'id': {'read_only': True}}
+
+    def validate_quantity(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Quantity cannot be negative.")
+        return value
