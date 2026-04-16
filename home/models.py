@@ -1,11 +1,12 @@
 from django.db import models
-from django.conf import settings # Import settings to reference user model
 
-class Feedback(models.Model):
-    # Existing fields ...
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,   # Allows empty values in DB
-        blank=True   # Allows empty values in forms
-    )
+class MenuItem(models.Model):
+    # ... existing fields ...
+    name = models.CharField(max_length=200)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+
+    # ADD THIS LINE
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
